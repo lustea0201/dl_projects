@@ -6,7 +6,7 @@ from models.digit_classifier import DigitClassifier
 class Net1(nn.Module):
     def __init__(self, c1 = 32, c2 = 32, c3 = 64, h = 100, p = 0.3):
         super().__init__()
-        self.digit_classifier = DigitClassifier(1, c1, c2, c3, h, p)
+        self.digit_classifier = DigitClassifier(1, True, c1, c2, c3, h, p)
 
     def forward(self, x):
         x1 = x[:, 0, :, :].unsqueeze(axis = 1)

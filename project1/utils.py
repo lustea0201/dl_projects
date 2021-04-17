@@ -108,7 +108,8 @@ def train_model_double_objective(model, train_input, train_target, train_classes
                 e, epoch_loss, train_acc, test_acc))
             
 
-            
+
+# TODO: change this so that it uses accuracy method
 def accuracy_of_digit_class(model, input_, classes, mini_batch_size = 10):
   nb_errors = 0
   for b in range(0, input_.size(0), mini_batch_size): 
