@@ -90,7 +90,7 @@ def train_model_double_objective(model, train_input, train_target, train_classes
             input_ = train_input.narrow(0, b, mini_batch_size)
             output, output2, output3 = model(input_)
             
-            loss = criterion(output, train_target.narrow(0, b, mini_batch_size))
+            loss = criterion(output, (train_target.narrow(0, b, mini_batch_size)).type_as(output))
             loss += beta*criterion2(output2, train_classes.narrow(0, b, mini_batch_size)[:,0])
             loss += beta*criterion2(output3, train_classes.narrow(0, b, mini_batch_size)[:,1])
                 
