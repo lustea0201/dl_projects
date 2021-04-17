@@ -16,5 +16,8 @@ class Net1(nn.Module):
         x2 = self.digit_classifier(x2)
 
         x = (x2-x1).squeeze()
+        
+        if not self.training:
+            x = (x > 0).long()
 
         return x

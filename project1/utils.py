@@ -43,6 +43,7 @@ def show_pair(X, y, i):
     
     
 def accuracy(model, input_, target, mini_batch_size, with_class = False):
+    model.eval()
     nb_errors = 0
     for b in range(0, input_.size(0), mini_batch_size):
         if with_class: 
@@ -50,15 +51,16 @@ def accuracy(model, input_, target, mini_batch_size, with_class = False):
         else:
             output = model(input_.narrow(0, b, mini_batch_size))
             
-        pred = (output > 0).long()
         gt = target.narrow(0, b, mini_batch_size)
-        nb_errors += (pred != gt).sum().item()
+        nb_errors += (output != gt).sum().item()
     N = input_.shape[0]
     return 100*(N-nb_errors)/N
 
 
 def train_model(model, train_input, train_target, test_input, test_target, nb_epochs, mini_batch_size, optimizer, criterion, verbose = True):
+
     for e in range(nb_epochs):
+        model.train()
         epoch_loss = 0
         for b in range(0, train_input.size(0), mini_batch_size):
             input_ = train_input.narrow(0, b, mini_batch_size)
@@ -71,17 +73,18 @@ def train_model(model, train_input, train_target, test_input, test_target, nb_ep
             
             loss.backward()
             optimizer.step()
-                    
-        train_acc = accuracy(model, train_input, train_target, mini_batch_size)
-        test_acc = accuracy(model, test_input, test_target, mini_batch_size)
         
         if verbose:
+            train_acc = accuracy(model, train_input, train_target, mini_batch_size)
+            test_acc = accuracy(model, test_input, test_target, mini_batch_size)
             print('Epoch {:d}: loss {:.3f} / train accuracy {:.1f}%, test accuracy {:.1f}'.format(
                 e, epoch_loss, train_acc, test_acc))
                 
                 
 def train_model_double_objective(model, train_input, train_target, train_classes, test_input, test_target, test_classes, nb_epochs, mini_batch_size, optimizer, criterion, criterion2, beta = 1, verbose = True):
+    
     for e in range(nb_epochs):
+        model.train()
         epoch_loss = 0
         for b in range(0, train_input.size(0), mini_batch_size):
             input_ = train_input.narrow(0, b, mini_batch_size)
@@ -97,13 +100,24 @@ def train_model_double_objective(model, train_input, train_target, train_classes
             
             loss.backward()
             optimizer.step()
-                    
-        train_acc = accuracy(model, train_input, train_target, mini_batch_size, with_class = True)
-        test_acc = accuracy(model, test_input, test_target, mini_batch_size, with_class = True)
         
         if verbose:
+            train_acc = accuracy(model, train_input, train_target, mini_batch_size, with_class = True)
+            test_acc = accuracy(model, test_input, test_target, mini_batch_size, with_class = True)
             print('Epoch {:d}: loss {:.3f} / train accuracy {:.1f}%, test accuracy {:.1f}'.format(
                 e, epoch_loss, train_acc, test_acc))
+            
+
+            
+def accuracy_of_digit_class(model, input_, classes, mini_batch_size = 10):
+  nb_errors = 0
+  for b in range(0, input_.size(0), mini_batch_size): 
+    _, out1, _ = model(input_.narrow(0, b, mini_batch_size))
+    _, pred = torch.max(out1, dim=1)
+    gt = classes.narrow(0, b, mini_batch_size)[:, 0]
+    nb_errors += (pred != gt).sum().item()
+  N = input_.shape[0]
+  return 100*(N-nb_errors)/N
             
             
 

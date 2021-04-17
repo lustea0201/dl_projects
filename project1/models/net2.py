@@ -21,6 +21,9 @@ class Net2(nn.Module):
         
         x = (xx2-xx1).squeeze()
         
+        if not self.training:
+            x = (x > 0).long()
+        
         return x, x1, x2
     
 
