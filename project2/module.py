@@ -44,7 +44,7 @@ class Tanh(Activation):
 class Linear(Module):
     def __init__(self, input_dim, output_dim, sigma = 1):
         self.W = torch.empty((output_dim, input_dim)).normal_(0, sigma)
-        self.b = torch.empty(output_dim, 1).normal_(0, sigma)
+        self.b = torch.empty(output_dim).normal_(0, sigma)
         self.zero_grad()
 
     def zero_grad(self):
@@ -56,7 +56,7 @@ class Linear(Module):
         """ input_: (B x D_input)"""
 
         self.input2 = input_
-        output = (torch.mm(self.W, input_.T) + self.b).T
+        output = (torch.mm(self.W, input_.T) + self.b.unsqueeze(1)).T
 
         return output
         
@@ -66,7 +66,7 @@ class Linear(Module):
     
         grad_input = torch.mm(grad_output, self.W)
         self.grad_W += torch.mm(grad_output.T, input_)
-        self.grad_b += grad_output.T
+        self.grad_b += grad_output.T.sum(axis = 1)
 
         return grad_input
 
