@@ -16,7 +16,7 @@ class Activation(Module):
         return output
 
     def backward(self, grad_output):
-        grad_input = grad_output *  self.f_prime(self.input_)
+        grad_input = grad_output *  self.f_prime(self.input)
         return grad_input
 
 
