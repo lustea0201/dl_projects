@@ -1,6 +1,9 @@
 import torch
 
 class Module(object):
+    def __init__(self):
+        self.trainable = False
+        
     def forward(self , *input):
         raise NotImplementedError
     def backward(self , *gradwrtoutput):
@@ -39,6 +42,21 @@ class Tanh(Activation):
     @staticmethod
     def f_prime(x):
         return 4 * (x.exp() + x.mul(-1).exp()).pow(-2)
+    
+class LossMSE(Module):
+    def forward(self , prediction, target):
+        error = target - prediction
+        self.error = error
+        self.n = len(prediction)
+        loss = torch.pow(error, 2).sum()/self.n
+        
+        return loss
+        
+    def backward(self):
+        return -2*self.error/self.n
+    
+    def param(self):
+        return []
 
 
 class Linear(Module):
@@ -46,6 +64,7 @@ class Linear(Module):
         self.W = torch.empty((output_dim, input_dim)).normal_(0, sigma)
         self.b = torch.empty(output_dim).normal_(0, sigma)
         self.zero_grad()
+        self.trainable = True
 
     def zero_grad(self):
         self.grad_W = torch.zeros(self.W.shape)
@@ -73,3 +92,27 @@ class Linear(Module):
 
     def param(self):
         return [(self.W, self.grad_W), (self.b, self.grad_b)]
+    
+class Sequential(Module):
+    def __init__(self, *layers):
+        self.layers = layers
+        
+    def forward(self , input_):
+        output = input_
+        for layer in self.layers:
+            output = layer.forward(output)
+        return output
+        
+    def backward(self , grad_output):
+        grad_input = grad_output
+        for layer in reversed(self.layers):
+            grad_input = layer.backward(grad_input)
+        return grad_input
+        
+    def zero_grad(self):
+        for layer in self.layers:
+            if layer.trainable:
+                layer.zero_grad()
+            
+    def param(self):
+        return []
