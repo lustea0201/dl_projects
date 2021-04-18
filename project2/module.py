@@ -52,20 +52,21 @@ class Linear(Module):
         self.grad_b = torch.zeros(self.b.shape)
 
 
-
     def forward(self, input_):
+        """ input_: (B x D_input)"""
 
-        self.input = input_
-        output = self.W.mm(input_) + self.b
+        self.input2 = input_
+        output = (torch.mm(self.W, input_.T) + self.b).T
 
         return output
-
+        
+    
     def backward(self, grad_output):
-        input_ = self.input
-
-        grad_input = torch.mm(self.W.T, grad_output)
-        self.grad_W += torch.mm(grad_output, self.input.T)
-        self.grad_b += grad_output
+        input_ = self.input2
+    
+        grad_input = torch.mm(grad_output, self.W)
+        self.grad_W += torch.mm(grad_output.T, input_)
+        self.grad_b += grad_output.T
 
         return grad_input
 
