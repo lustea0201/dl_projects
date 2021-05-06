@@ -1,4 +1,4 @@
-from torch import linspace, empty
+from torch import empty
 from matplotlib.pyplot import figure, scatter, legend, show
 from math import pi
 
@@ -18,9 +18,10 @@ def generate_dataset(nSamples = 1000,):
 
 def show_dataset(X, y):
     figure(figsize=(6,6))
-    pos = (y > 0)
+    pos = (y > 0)[:,0]
     scatter(X[pos,0], X[pos,1], c = 'green')
     scatter(X[~pos,0], X[~pos,1], c = 'red')
-    scatter(CENTER[0]+linspace(0, R_2.sqrt(), 50), [CENTER[1]]*50, c = 'blue')
+    n = 50
+    scatter(CENTER[0]+empty(50).new_tensor([i/(n-1)*R_2.sqrt() for i in range(n)]), [CENTER[1]]*n, c = 'blue')
     legend(['1', '0', 'radius check'])
     show()

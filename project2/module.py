@@ -58,18 +58,18 @@ class LossMSE(Module):
     def param(self):
         return []
 
-class LossNLL(Module):
+class LossBCE(Module):
     def forward(self , prediction, target):
         self.p = prediction
         self.t = target
-        loss = (prediction.logaddexp(empty(prediction.shape).zero_()) - target*prediction).sum()
+        loss = (prediction.logaddexp(empty(prediction.shape).zero_()) - target*prediction).sum()/len(target)
 
         return loss
 
     def backward(self):
         exp = self.p.exp()
 
-        return (exp/(1+exp) - self.t)
+        return (exp/(1+exp) - self.t)/len(self.t)
 
     def param(self):
         return []
