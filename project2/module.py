@@ -1,4 +1,4 @@
-import torch
+from torch import empty
 
 class Module(object):
     def __init__(self):
@@ -48,7 +48,7 @@ class LossMSE(Module):
         error = target - prediction
         self.error = error
         self.n = len(prediction)
-        loss = torch.pow(error, 2).sum()/self.n
+        loss = error.pow(2).sum()/self.n
         
         return loss
         
@@ -61,21 +61,21 @@ class LossMSE(Module):
 
 class Linear(Module):
     def __init__(self, input_dim, output_dim, sigma = 1):
-        self.W = torch.empty((output_dim, input_dim)).normal_(0, sigma)
-        self.b = torch.empty(output_dim).normal_(0, sigma)
+        self.W = empty((output_dim, input_dim)).normal_(0, sigma)
+        self.b = empty(output_dim).normal_(0, sigma)
         self.zero_grad()
         self.trainable = True
 
     def zero_grad(self):
-        self.grad_W = torch.zeros(self.W.shape)
-        self.grad_b = torch.zeros(self.b.shape)
+        self.grad_W = empty(self.W.shape).zero_() 
+        self.grad_b = empty(self.b.shape).zero_()
 
 
     def forward(self, input_):
         """ input_: (B x D_input)"""
 
         self.input2 = input_
-        output = (torch.mm(self.W, input_.T) + self.b.unsqueeze(1)).T
+        output = (self.W.mm(input_.T) + self.b.unsqueeze(1)).T
 
         return output
         
@@ -83,8 +83,8 @@ class Linear(Module):
     def backward(self, grad_output):
         input_ = self.input2
     
-        grad_input = torch.mm(grad_output, self.W)
-        self.grad_W += torch.mm(grad_output.T, input_)
+        grad_input = grad_output.mm(self.W)
+        self.grad_W += grad_output.T.mm(input_)
         self.grad_b += grad_output.T.sum(axis = 1)
 
         return grad_input
