@@ -1,7 +1,8 @@
 from utils import generate_dataset
 from module import Linear, Sequential, ReLU, Tanh, LossMSE
-import torch
-torch.set_grad_enabled(False) # REQUIRED
+from torch import set_grad_enabled, manual_seed
+set_grad_enabled(False) # REQUIRED
+manual_seed(3)
 
 n_samples = 1000
 X_train, y_train, X_test, y_test = generate_dataset(n_samples)
