@@ -40,9 +40,15 @@ class ResNetBlock(nn.Module):
         return y
     
 class Net3(nn.Module):
-    def __init__(self,nb_residual_blocks, c1 = 32, c2 = 32, c3 = 64, h = 100, p = 0.3, hidden_channel_1 = 1, hidden_channel_2 = 10):
+    def __init__(self, nb_residual_blocks, pretrained_submodel = None, c1 = 32, c2 = 32, c3 = 64, h = 100, p = 0.3, hidden_channel_1 = 1, hidden_channel_2 = 10):
         super().__init__()
-        self.digit_classifier = DigitClassifier(10, True, c1, c2, c3, h, p)
+        if pretrained_submodel is None:
+            self.digit_classifier = DigitClassifier(10, True, c1, c2, c3, h, p)
+        else:
+            self.digit_classifier = pretrained_submodel
+            self.digit_classifier.subnet = True
+            self.digit_classifier.train()
+        #self.digit_classifier = DigitClassifier(10, True, c1, c2, c3, h, p)
         self.fc3 = nn.Linear(10, 1)
         self.resnet_blocks = nn.Sequential(
             *(ResNetBlock(1,3, True, hidden_channel_1 , hidden_channel_2 )
