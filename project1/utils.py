@@ -108,9 +108,8 @@ def train_model_double_objective(model, train_input, train_target, train_classes
                 e, epoch_loss, train_acc, test_acc))
             
 
-
-# TODO: change this so that it uses accuracy method
 def accuracy_of_digit_class(model, input_, classes, mini_batch_size = 10):
+  """ This method evaluates the accuracy of the digit_classifier subnetwork of model """
   nb_errors = 0
   for b in range(0, input_.size(0), mini_batch_size): 
     _, out1, _ = model(input_.narrow(0, b, mini_batch_size))
@@ -119,6 +118,14 @@ def accuracy_of_digit_class(model, input_, classes, mini_batch_size = 10):
     nb_errors += (pred != gt).sum().item()
   N = input_.shape[0]
   return 100*(N-nb_errors)/N
+
+
+def dfs_freeze(model):
+    """ Freeze all the weights and biases in the network, to avoid optimization """
+    for name, child in model.named_children():
+        for param in child.parameters():
+            param.requires_grad = False
+        dfs_freeze(child)
             
             
 
