@@ -126,6 +126,10 @@ def dfs_freeze(model):
         for param in child.parameters():
             param.requires_grad = False
         dfs_freeze(child)
+        
+def num_of_train_param(model):
+    nParams = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('The model has {:d} trainable parameters'.format(nParams))
             
             
 
