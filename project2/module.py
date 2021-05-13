@@ -15,14 +15,6 @@ class Module(object):
 
 class Activation(Module):
     """ Generic class for an activation function. 
-    
-    Methods
-    -------
-    forward(input_)
-        Performs the forward pass for a generic activation function.
-        
-    backward(grad_output)
-        Performs the backward pass for a generic activation function.
     """
     
     def forward(self, input_):
@@ -79,14 +71,6 @@ class Activation(Module):
 class ReLU(Activation):
     """ Rectified Linear Unit class.
     Overrides f and f_prime.
-    
-    Methods
-    -------
-    f(x)
-        Apply the ReLU function to x.
-        
-    f_prime(x)
-        Apply the derivative of ReLU to x.
     """
     
     @staticmethod
@@ -138,10 +122,10 @@ class Tanh(Activation):
     
     Methods
     -------
-    f(x)
+    f(x):
         Apply the Tanh function to x.
         
-    f_prime(x)
+    f_prime(x):
         Apply the derivative of Tanh to x.
     """
     
@@ -188,14 +172,6 @@ class Tanh(Activation):
 
 class LossMSE(Module):
     """ Mean Squared Error Loss. 
-    
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the MSE of a prediction given a target.
-        
-    backward()
-        Computes the gradient at the input of the loss function
     """
     
     def forward(self , prediction, target):
@@ -235,14 +211,6 @@ class LossMSE(Module):
 
 class LossBCE(Module):
     """ Binary Cross Entropy Loss. 
-    
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the BCE of a prediction given a target.
-        
-    backward()
-        Computes the gradient at the input of the loss function
     """
     
     def forward(self , prediction, target):
@@ -285,15 +253,6 @@ class LossBCE(Module):
 
 class Linear(Module):
     """ Fully Connected Layer. 
-    
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the forward pass.
-    backward()
-        Computes the backward pass.
-    zero_grad()
-        Re-set the gradients og the weights and biases to 0. 
     """
     
     def __init__(self, input_dim, output_dim, sigma = 1.):
@@ -371,14 +330,6 @@ class Linear(Module):
 
 class Sequential(Module):
     """ Sequential neural network 
-    
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the forward pass through all layers.
-        
-    backward()
-        Computes the backward pass through all layers.
     """
     
     def __init__(self, *layers):

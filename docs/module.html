@@ -43,14 +43,6 @@ class Module(object):
 
 class Activation(Module):
     &#34;&#34;&#34; Generic class for an activation function.
-
-    Methods
-    -------
-    forward(input_)
-        Performs the forward pass for a generic activation function.
-
-    backward(grad_output)
-        Performs the backward pass for a generic activation function.
     &#34;&#34;&#34;
 
     def forward(self, input_):
@@ -107,14 +99,6 @@ class Activation(Module):
 class ReLU(Activation):
     &#34;&#34;&#34; Rectified Linear Unit class.
     Overrides f and f_prime.
-
-    Methods
-    -------
-    f(x)
-        Apply the ReLU function to x.
-
-    f_prime(x)
-        Apply the derivative of ReLU to x.
     &#34;&#34;&#34;
 
     @staticmethod
@@ -166,10 +150,10 @@ class Tanh(Activation):
 
     Methods
     -------
-    f(x)
+    f(x):
         Apply the Tanh function to x.
 
-    f_prime(x)
+    f_prime(x):
         Apply the derivative of Tanh to x.
     &#34;&#34;&#34;
 
@@ -216,14 +200,6 @@ class Tanh(Activation):
 
 class LossMSE(Module):
     &#34;&#34;&#34; Mean Squared Error Loss.
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the MSE of a prediction given a target.
-
-    backward()
-        Computes the gradient at the input of the loss function
     &#34;&#34;&#34;
 
     def forward(self , prediction, target):
@@ -263,14 +239,6 @@ class LossMSE(Module):
 
 class LossBCE(Module):
     &#34;&#34;&#34; Binary Cross Entropy Loss.
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the BCE of a prediction given a target.
-
-    backward()
-        Computes the gradient at the input of the loss function
     &#34;&#34;&#34;
 
     def forward(self , prediction, target):
@@ -313,15 +281,6 @@ class LossBCE(Module):
 
 class Linear(Module):
     &#34;&#34;&#34; Fully Connected Layer.
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the forward pass.
-    backward()
-        Computes the backward pass.
-    zero_grad()
-        Re-set the gradients og the weights and biases to 0.
     &#34;&#34;&#34;
 
     def __init__(self, input_dim, output_dim, sigma = 1.):
@@ -399,14 +358,6 @@ class Linear(Module):
 
 class Sequential(Module):
     &#34;&#34;&#34; Sequential neural network
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the forward pass through all layers.
-
-    backward()
-        Computes the backward pass through all layers.
     &#34;&#34;&#34;
 
     def __init__(self, *layers):
@@ -474,7 +425,6 @@ class Sequential(Module):
 </section>
 <section>
 </section>
-
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
@@ -482,26 +432,13 @@ class Sequential(Module):
 <span>class <span class="ident">Activation</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Generic class for an activation function. </p>
-<h2 id="methods">Methods</h2>
-<p>forward(input_)
-Performs the forward pass for a generic activation function.</p>
-<p>backward(grad_output)
-Performs the backward pass for a generic activation function.</p></div>
+<div class="desc"><p>Generic class for an activation function.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Activation(Module):
     &#34;&#34;&#34; Generic class for an activation function.
-
-    Methods
-    -------
-    forward(input_)
-        Performs the forward pass for a generic activation function.
-
-    backward(grad_output)
-        Performs the backward pass for a generic activation function.
     &#34;&#34;&#34;
 
     def forward(self, input_):
@@ -685,13 +622,6 @@ Stores the input_ for the backward pass and call the function itself. </p>
 </code></dt>
 <dd>
 <div class="desc"><p>Fully Connected Layer. </p>
-<h2 id="methods">Methods</h2>
-<p>forward(prediction, target)
-Computes the forward pass.
-backward()
-Computes the backward pass.
-zero_grad()
-Re-set the gradients og the weights and biases to 0. </p>
 <p>Constructor
 Intializes the weight matrix and bias vector, set their gradient to 0 and declares the layer as trainable.</p>
 <h2 id="parameters">Parameters</h2>
@@ -709,15 +639,6 @@ Intializes the weight matrix and bias vector, set their gradient to 0 and declar
 </summary>
 <pre><code class="python">class Linear(Module):
     &#34;&#34;&#34; Fully Connected Layer.
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the forward pass.
-    backward()
-        Computes the backward pass.
-    zero_grad()
-        Re-set the gradients og the weights and biases to 0.
     &#34;&#34;&#34;
 
     def __init__(self, input_dim, output_dim, sigma = 1.):
@@ -917,26 +838,13 @@ Stores the input_ for the backward pass. </p>
 <span>class <span class="ident">LossBCE</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Binary Cross Entropy Loss. </p>
-<h2 id="methods">Methods</h2>
-<p>forward(prediction, target)
-Computes the BCE of a prediction given a target.</p>
-<p>backward()
-Computes the gradient at the input of the loss function</p></div>
+<div class="desc"><p>Binary Cross Entropy Loss.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class LossBCE(Module):
     &#34;&#34;&#34; Binary Cross Entropy Loss.
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the BCE of a prediction given a target.
-
-    backward()
-        Computes the gradient at the input of the loss function
     &#34;&#34;&#34;
 
     def forward(self , prediction, target):
@@ -1063,26 +971,13 @@ Stores the prediction and target for the backward pass. </p>
 <span>class <span class="ident">LossMSE</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Mean Squared Error Loss. </p>
-<h2 id="methods">Methods</h2>
-<p>forward(prediction, target)
-Computes the MSE of a prediction given a target.</p>
-<p>backward()
-Computes the gradient at the input of the loss function</p></div>
+<div class="desc"><p>Mean Squared Error Loss.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class LossMSE(Module):
     &#34;&#34;&#34; Mean Squared Error Loss.
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the MSE of a prediction given a target.
-
-    backward()
-        Computes the gradient at the input of the loss function
     &#34;&#34;&#34;
 
     def forward(self , prediction, target):
@@ -1278,12 +1173,7 @@ Stores the error for the backward pass. </p>
 </code></dt>
 <dd>
 <div class="desc"><p>Rectified Linear Unit class.
-Overrides f and f_prime.</p>
-<h2 id="methods">Methods</h2>
-<p>f(x)
-Apply the ReLU function to x.</p>
-<p>f_prime(x)
-Apply the derivative of ReLU to x.</p></div>
+Overrides f and f_prime.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1291,14 +1181,6 @@ Apply the derivative of ReLU to x.</p></div>
 <pre><code class="python">class ReLU(Activation):
     &#34;&#34;&#34; Rectified Linear Unit class.
     Overrides f and f_prime.
-
-    Methods
-    -------
-    f(x)
-        Apply the ReLU function to x.
-
-    f_prime(x)
-        Apply the derivative of ReLU to x.
     &#34;&#34;&#34;
 
     @staticmethod
@@ -1449,11 +1331,6 @@ def f_prime(x):
 </code></dt>
 <dd>
 <div class="desc"><p>Sequential neural network </p>
-<h2 id="methods">Methods</h2>
-<p>forward(prediction, target)
-Computes the forward pass through all layers.</p>
-<p>backward()
-Computes the backward pass through all layers.</p>
 <p>Constructor.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
@@ -1466,14 +1343,6 @@ Computes the backward pass through all layers.</p>
 </summary>
 <pre><code class="python">class Sequential(Module):
     &#34;&#34;&#34; Sequential neural network
-
-    Methods
-    -------
-    forward(prediction, target)
-        Computes the forward pass through all layers.
-
-    backward()
-        Computes the backward pass through all layers.
     &#34;&#34;&#34;
 
     def __init__(self, *layers):
@@ -1660,9 +1529,9 @@ Computes the backward pass through all layers.</p>
 <div class="desc"><p>Hyperbolic tangent class.
 Overrides f and f_prime.</p>
 <h2 id="methods">Methods</h2>
-<p>f(x)
+<p>f(x):
 Apply the Tanh function to x.</p>
-<p>f_prime(x)
+<p>f_prime(x):
 Apply the derivative of Tanh to x.</p></div>
 <details class="source">
 <summary>
@@ -1674,10 +1543,10 @@ Apply the derivative of Tanh to x.</p></div>
 
     Methods
     -------
-    f(x)
+    f(x):
         Apply the Tanh function to x.
 
-    f_prime(x)
+    f_prime(x):
         Apply the derivative of Tanh to x.
     &#34;&#34;&#34;
 
