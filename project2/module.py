@@ -1,4 +1,5 @@
 from torch import empty
+from math import sqrt
 
 class Module(object):
     """ Base class. """
@@ -265,14 +266,17 @@ class Linear(Module):
             The dimension of the input vectors
         output_dim: int
             The dimension of the output vectors
-        initialization: string ('normal' or 'Xavier')
+        initialization: string ('normal' or 'xavier'), optional
             The standard deviation of the normal distribution to initialize weights and biases.
         """
         
         if (initialization == 'normal'):
-            self.W = empty((output_dim, input_dim)).normal_(0, 1)
+            self.W = empty((output_dim, input_dim)).normal_()
         elif (initialization == 'xavier'):
-            self.W = empty((output_dim, input_dim)).uniform_(-1, 1)*math.sqrt(6./(output_dim + input_dim))
+              a = sqrt(6./(output_dim + input_dim))
+              self.W = empty((output_dim, input_dim)).uniform_(-a, a)
+        elif (initialization == 'kaiming'):
+              self.W = empty((output_dim, input_dim)).normal_()*sqrt(2/input_dim)
         else:
             raise ValueError("Initialization strategy \"{:s}\" is not implemented".format(initialization))
         self.b = empty(output_dim).zero_()
@@ -301,7 +305,7 @@ class Linear(Module):
         """
         
         self.input = input_
-        output = (self.W.mm(input_.T) + self.b.unsqueeze(1)).T
+        output = input_.mm(self.W.T) + self.b 
 
         return output
 
