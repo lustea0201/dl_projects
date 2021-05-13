@@ -255,7 +255,7 @@ class Linear(Module):
     """ Fully Connected Layer. 
     """
     
-    def __init__(self, input_dim, output_dim, sigma = 1.):
+    def __init__(self, input_dim, output_dim, initialization = 'xavier'):
         """ Constructor
         Intializes the weight matrix and bias vector, set their gradient to 0 and declares the layer as trainable.
         
@@ -265,12 +265,17 @@ class Linear(Module):
             The dimension of the input vectors
         output_dim: int
             The dimension of the output vectors
-        sigma: float
+        initialization: string ('normal' or 'Xavier')
             The standard deviation of the normal distribution to initialize weights and biases.
         """
         
-        self.W = empty((output_dim, input_dim)).normal_(0, sigma)
-        self.b = empty(output_dim).normal_(0, sigma)
+        if (initialization == 'normal'):
+            self.W = empty((output_dim, input_dim)).normal_(0, 1)
+        elif (initialization == 'xavier'):
+            self.W = empty((output_dim, input_dim)).uniform_(-1, 1)*math.sqrt(6./(output_dim + input_dim))
+        else:
+            raise ValueError("Initialization strategy \"{:s}\" is not implemented".format(initialization))
+        self.b = empty(output_dim).zero_()
         self.zero_grad()
         self.trainable = True
 
