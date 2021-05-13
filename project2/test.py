@@ -1,5 +1,5 @@
 from utils import generate_dataset
-from module import Linear, Sequential, ReLU, Tanh, LossMSE, LossNLL
+from module import Linear, Sequential, ReLU, Tanh, LossBCE, LossMSE
 from torch import set_grad_enabled, manual_seed
 set_grad_enabled(False) # REQUIRED
 manual_seed(3)
@@ -9,19 +9,9 @@ X_train, y_train, X_test, y_test = generate_dataset(n_samples)
 
 input_dim, h1, h2, h3, output_dim = 2, 25, 25, 25, 1
 
-model = Sequential(Linear(input_dim, h1),
-                   Tanh(),
-                   Linear(h1, h2),
-                   Tanh(),
-                   Linear(h2, h3),
-                   Tanh(),
-                   Linear(h3, output_dim))
-LS = LossMSE()
-nb_epochs = 100
-mini_batch_size = 50
-lr = 1e-2/n_samples*mini_batch_size # 1e-2 for MSE
 
-def train(nb_epochs, LS, lr):
+
+def train(model, nb_epochs, LS, lr, mini_batch_size):
     for epoch in range(nb_epochs):
         model.zero_grad()
         for i in range(0, X_train.size(0), mini_batch_size):
@@ -51,6 +41,34 @@ def train(nb_epochs, LS, lr):
         print('Epoch {:d}: loss = {:.3f}, accuracy = {:.1f}% (train)/{:.1f}% (test))'.format(epoch, loss.item(),
                                                                                              accuracy_train*100,
                                                                                              accuracy_test*100))
+activation = Tanh
+model = Sequential(Linear(input_dim, h1),
+                   activation(),
+                   Linear(h1, h2),
+                   activation(),
+                   Linear(h2, h3),
+                   activation(),
+                   Linear(h3, output_dim))
+LS = LossMSE()
+nb_epochs = 100
+mini_batch_size = 50
+lr = 1e-3/n_samples*mini_batch_size # 1e-2 for MSE
+
+train(model, nb_epochs, LS, lr, mini_batch_size)
 
 
-train(100, LS, lr)
+
+activation = ReLU
+model = Sequential(Linear(input_dim, h1),
+                   activation(),
+                   Linear(h1, h2),
+                   activation(),
+                   Linear(h2, h3),
+                   activation(),
+                   Linear(h3, output_dim))
+LS = LossBCE()
+nb_epochs = 100
+mini_batch_size = 50
+lr = 1e-3/n_samples*mini_batch_size # 1e-2 for MSE
+
+train(model, nb_epochs, LS, lr, mini_batch_size)
