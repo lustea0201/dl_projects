@@ -142,13 +142,17 @@ def num_of_train_param(model):
     nParams = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print('The model has {:d} trainable parameters'.format(nParams))
     
-    
+#TODO: add title and print final accuracy and std
 def visualize_accuracy(train_accs, test_accs, train_losses):
     train_accs = torch.tensor(train_accs)
     test_accs = torch.tensor(test_accs)
-    train_losses = torch.tensor(train_losses)
-    train_std, train_mean = torch.std_mean(train_accs, dim=0)
-    test_std, test_mean = torch.std_mean(test_accs, dim=0)
+    #train_losses = torch.tensor(train_losses)
+    train_mean = torch.mean(train_accs, dim=0)
+    test_mean = torch.mean(test_accs, dim=0)
+    train_std = torch.zeros(size=train_mean.shape)
+    train_std[-1] = torch.std(train_accs[:, -1])
+    test_std = torch.zeros(size=test_mean.shape)
+    test_std[-1] = torch.std(test_accs[:, -1])
     #loss_std, loss_mean = torch.std_mean(train_losses, dim=0)
     
     import matplotlib.pyplot as plt
@@ -160,7 +164,7 @@ def visualize_accuracy(train_accs, test_accs, train_losses):
     plt.errorbar(range(nb_epochs), train_mean, yerr=train_std, fmt='b-o', label="train")
     plt.errorbar(range(nb_epochs), test_mean, yerr=test_std, fmt='g-o', label="test")
     #plt.errorbar(range(nb_epochs), loss_mean, yerr=loss_std, fmt='r-o')
-    plt.legend(loc="upper right")
+    plt.legend(loc="upper left")
     plt.show()
             
             
