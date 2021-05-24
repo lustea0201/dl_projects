@@ -137,8 +137,7 @@ def dfs_freeze(model):
         dfs_freeze(child)
         
 def num_of_train_param(model):
-    nParams = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print('The model has {:d} trainable parameters'.format(nParams))
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
     
 def calculate_mean_std(train_accs, test_accs, train_losses):
     #train_losses = torch.tensor(train_losses)
