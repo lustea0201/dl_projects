@@ -1,0 +1,7 @@
+net1 - accuracy: 81.14 ± 1.57, lr: 0.000483
+net1 + weight sharing - accuracy: 83.36 ± 1.13, lr: 0.000399
+convnet - accuracy: 80.75 ± 1.28, lr: 0.000449
+convnet + weight sharing - accuracy: 79.86 ± 1.50, lr: 0.000179
+net2 - accuracy: 86.25 ± 1.11, lr: 0.000483
+net2 + pre-train dc - accuracy: 88.18 ± 1.18, lr: 0.000263
+

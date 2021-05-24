@@ -59,7 +59,10 @@ def accuracy(model, input_, target, mini_batch_size, with_class = False):
 
 def train_model(model, train_input, train_target, test_input, test_target, nb_epochs, mini_batch_size, optimizer, criterion):
 
-    train_accuracy, test_accuracy, train_loss = [], [], []
+    train_accuracy = torch.empty(size=(1, nb_epochs))
+    test_accuracy = torch.empty(size=(1, nb_epochs))
+    train_loss = []
+    
     for e in range(nb_epochs):
         model.train()
         epoch_loss = 0
@@ -76,20 +79,19 @@ def train_model(model, train_input, train_target, test_input, test_target, nb_ep
             loss.backward()
             optimizer.step()
         
-        train_acc = accuracy(model, train_input, train_target, mini_batch_size)
-        test_acc = accuracy(model, test_input, test_target, mini_batch_size)
-        train_accuracy.append(train_acc)
-        test_accuracy.append(test_acc)
+        train_accuracy[0][e] = accuracy(model, train_input, train_target, mini_batch_size)
+        test_accuracy[0][e] = accuracy(model, test_input, test_target, mini_batch_size)
         train_loss.append(epoch_loss)
-        #print('Epoch {:d}: loss {:.3f} / train accuracy {:.1f}%, test accuracy {:.1f}'.format(
-        #    e, epoch_loss, train_acc, test_acc))
     
     return train_accuracy, test_accuracy, train_loss
 
                 
 def train_model_double_objective(model, train_input, train_target, train_classes, test_input, test_target, test_classes, nb_epochs, mini_batch_size, optimizer, criterion, criterion2, beta = 1):
     
-    train_accuracy, test_accuracy, train_loss = [], [], []
+    train_accuracy = torch.empty(size=(1, nb_epochs))
+    test_accuracy = torch.empty(size=(1, nb_epochs))
+    train_loss = []
+    
     for e in range(nb_epochs):
         model.train()
         epoch_loss = 0
@@ -107,15 +109,11 @@ def train_model_double_objective(model, train_input, train_target, train_classes
             model.zero_grad()
             
             loss.backward()
-            optimizer.step()
+            optimizer.step()        
         
-        train_acc = accuracy(model, train_input, train_target, mini_batch_size, with_class = True)
-        test_acc = accuracy(model, test_input, test_target, mini_batch_size, with_class = True)
-        train_accuracy.append(train_acc)
-        test_accuracy.append(test_acc)
+        train_accuracy[0][e] = accuracy(model, train_input, train_target, mini_batch_size, with_class = True)
+        test_accuracy[0][e] = accuracy(model, test_input, test_target, mini_batch_size, with_class = True)
         train_loss.append(epoch_loss)
-        #print('Epoch {:d}: loss {:.3f} / train accuracy {:.1f}%, test accuracy {:.1f}'.format(
-        #    e, epoch_loss, train_acc, test_acc))
     
     return train_accuracy, test_accuracy, train_loss
             
@@ -142,10 +140,7 @@ def num_of_train_param(model):
     nParams = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print('The model has {:d} trainable parameters'.format(nParams))
     
-#TODO: add title and print final accuracy and std
-def visualize_accuracy(train_accs, test_accs, train_losses):
-    train_accs = torch.tensor(train_accs)
-    test_accs = torch.tensor(test_accs)
+def calculate_mean_std(train_accs, test_accs, train_losses):
     #train_losses = torch.tensor(train_losses)
     train_mean = torch.mean(train_accs, dim=0)
     test_mean = torch.mean(test_accs, dim=0)
@@ -155,17 +150,6 @@ def visualize_accuracy(train_accs, test_accs, train_losses):
     test_std[-1] = torch.std(test_accs[:, -1])
     #loss_std, loss_mean = torch.std_mean(train_losses, dim=0)
     
-    import matplotlib.pyplot as plt
-    plt.figure(figsize=(7, 7))
-    plt.xlabel('epochs')
-    plt.ylabel('accuracy(%)')
-    nb_epochs = train_accs.shape[1]
-    plt.xticks(range(nb_epochs))
-    plt.errorbar(range(nb_epochs), train_mean, yerr=train_std, fmt='b-o', label="train")
-    plt.errorbar(range(nb_epochs), test_mean, yerr=test_std, fmt='g-o', label="test")
-    #plt.errorbar(range(nb_epochs), loss_mean, yerr=loss_std, fmt='r-o')
-    plt.legend(loc="upper left")
-    plt.show()
-            
+    return train_mean, train_std, test_mean, test_std 
             
 
