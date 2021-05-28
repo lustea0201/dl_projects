@@ -2,7 +2,7 @@
 ## Content
 
 - models: our different networks and auxilary network
-- utils.py: utility functions used for training and generating the error rate
+- utils.py: utility functions used for training and generating the error rates
 - dlc_practical_prologue.py:  provided functions that generate the data sets
 - test.py: example illustrating how to use our different models. Can be used by running
 
