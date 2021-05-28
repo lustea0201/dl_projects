@@ -115,6 +115,7 @@ for k in [0, 1]:
     # complexity of the model
     num_params[k] = num_of_train_param(model)
     
+    
 # final test accuracy
 print("Net2 final test error rate: {:.2f} \u00B1 {:.2f} %".format(final_acc[0][0],
                                                                 final_acc[0][1]))
@@ -129,6 +130,7 @@ print("Net2 train time: {:.2f}s \u00B1 {:.2f}s ".format(time_mean[0],
                                                         time_std[0]))
 print("Net2 + pre trained dc train time: {:.2f}s \u00B1 {:.2f}s".format(time_mean[1],
                                                                         time_std[1]))
+
 # show plot
 plt.legend(loc="upper left")
 plt.title("Net2")
