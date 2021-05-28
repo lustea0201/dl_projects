@@ -1,46 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-import matplotlib.pyplot as plt
-plt.rcParams['figure.figsize'] = (12, 4)
-
-GREATER = torch.tensor([[0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], dtype = torch.uint8)
-
-LESSOREQUAL = torch.tensor([[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                            [0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]], dtype=torch.uint8)
-
-def show_pair(X, y, i):
-    C = X[i].max().item()
-    symbol = C*(LESSOREQUAL if y[i] else GREATER)
-    plt.imshow(torch.cat([X[i][0], symbol, X[i][1]], axis = 1))
-    plt.axis("off")
-    
     
 def accuracy(model, input_, target, mini_batch_size, with_class = False):
     model.eval()
@@ -54,7 +14,7 @@ def accuracy(model, input_, target, mini_batch_size, with_class = False):
         gt = target.narrow(0, b, mini_batch_size)
         nb_errors += (output != gt).sum().item()
     N = input_.shape[0]
-    return 100*(N-nb_errors)/N
+    return 100-100*(N-nb_errors)/N
 
 
 def train_model(model, train_input, train_target, test_input, test_target, nb_epochs, mini_batch_size, optimizer, criterion):
