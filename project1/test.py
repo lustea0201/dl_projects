@@ -18,6 +18,7 @@ from models.net2 import Net2
 from dlc_practical_prologue import generate_pair_sets
 nSamples = 1000
 
+print('The execution of "test.py" has started, it may take a few minutes.')
 
 #### ConvNet ####
 
@@ -237,6 +238,6 @@ print("Net2 final test error rate: {:.2f} \u00B1 {:.2f} %".format(final_acc[0][0
 print("Net2 + pre-trained dc final test error rate: {:.2f} \u00B1 {:.2f} %".format(final_acc[1][0],
                                                                                  final_acc[1][1])) 
 # model complexity
-print("Net1 num of params: {:d}".format(num_params[0]))
-print("Net1 + weight sharing num of params: {:d}".format(num_params[1]))
+print("Net2 num of params: {:d}".format(num_params[0]))
+print("Net2 + weight sharing num of params: {:d}".format(num_params[1]))
 
