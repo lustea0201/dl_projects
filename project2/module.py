@@ -10,8 +10,6 @@ class Module(object):
         raise NotImplementedError
     def backward(self , *gradwrtoutput):
         raise NotImplementedError
-    def param(self):
-        return []
 
 
 class Activation(Module):
@@ -330,12 +328,6 @@ class Linear(Module):
 
         return grad_input
 
-
-    def param(self):
-        """ Returns a list of 2 tuples: [(weights, weights gradient), (biases, biases gradient)]"""
-
-        return [(self.W, self.grad_W), (self.b, self.grad_b)]
-
 class Sequential(Module):
     """ Sequential neural network
     """
@@ -406,9 +398,6 @@ class Sequential(Module):
 			Learning rate to tune the size of the step
 		"""
         for layer in self.layers:
-                if layer.param(): # If non-empty parameter list
+                if layer.trainable: 
                     layer.W -= lr*layer.grad_W
                     layer.b -= lr*layer.grad_b
-
-    def param(self):
-        return [layer.param() for layer in self.layers]
