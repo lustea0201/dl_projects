@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+# import functions
 from utils import train_model
 from utils import train_model_double_objective
 from utils import accuracy_of_digit_class
@@ -8,14 +9,17 @@ from utils import calculate_mean_std
 from models.digit_classifier import DigitClassifier
 from utils import num_of_train_param
 
+# import the models
+from models.convnet import ConvNet
+from models.net1 import Net1
+from models.net2 import Net2
+
 #import the data
 from dlc_practical_prologue import generate_pair_sets
 nSamples = 1000
 
 
 #### ConvNet ####
-
-from models.convnet import ConvNet
 
 nb_epochs = 30
 mini_batch_size = 100
@@ -42,6 +46,7 @@ for k in [0, 1]:
 
         # load data
         train_input, train_target, train_classes, test_input, test_target, test_classes = generate_pair_sets(nSamples)
+        
         # pad input to size 16 x 16 (power of 2, so that it can be run through 3 max-pool layers)
         train_input_cnn = torch.nn.functional.pad(train_input, (1, 1, 1, 1), 'constant', 0)
         test_input_cnn = torch.nn.functional.pad(test_input, (1, 1, 1, 1), 'constant', 0)
@@ -82,8 +87,6 @@ print("ConvNet + weight sharing num of params: {:d}".format(num_params[1]))
 
 
 #### Net1 ####
-
-from models.net1 import Net1
 
 # initialize parameters
 mini_batch_size = 100
@@ -147,8 +150,6 @@ print("Net1 + weight sharing num of params: {:d}".format(num_params[1]))
 
 
 #### Net2 ####
-
-from models.net2 import Net2
 
 # digit classifier params
 mini_batch_size_dc = 100
