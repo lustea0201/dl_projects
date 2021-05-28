@@ -7,12 +7,12 @@
 - test.py: example illustrating how to use our different models. Can be used by running
 
   `python test.py`
-  in a terminal (executes in roughly 10 mins in the course VM<sup>1</sup>)
+  in a terminal (executes in roughly 25 mins in the course VM<sup>1</sup>)
   
 - predict.py: sample example executing the best network of our model. Can be used by running
 
   `python predict.py`
-  in a terminal (executes in roughly 1 min in the course VM<sup>1</sup>)
+  in a terminal (executes in roughly 5 min in the course VM<sup>1</sup>)
 
   
 1: Time to download MNIST excluded
