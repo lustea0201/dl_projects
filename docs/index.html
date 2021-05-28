@@ -38,8 +38,6 @@ class Module(object):
         raise NotImplementedError
     def backward(self , *gradwrtoutput):
         raise NotImplementedError
-    def param(self):
-        return []
 
 
 class Activation(Module):
@@ -358,12 +356,6 @@ class Linear(Module):
 
         return grad_input
 
-
-    def param(self):
-        &#34;&#34;&#34; Returns a list of 2 tuples: [(weights, weights gradient), (biases, biases gradient)]&#34;&#34;&#34;
-
-        return [(self.W, self.grad_W), (self.b, self.grad_b)]
-
 class Sequential(Module):
     &#34;&#34;&#34; Sequential neural network
     &#34;&#34;&#34;
@@ -434,12 +426,9 @@ class Sequential(Module):
                         Learning rate to tune the size of the step
                 &#34;&#34;&#34;
         for layer in self.layers:
-                if layer.param(): # If non-empty parameter list
+                if layer.trainable: 
                     layer.W -= lr*layer.grad_W
-                    layer.b -= lr*layer.grad_b
-
-    def param(self):
-        return [layer.param() for layer in self.layers]</code></pre>
+                    layer.b -= lr*layer.grad_b</code></pre>
 </details>
 </section>
 <section>
@@ -775,13 +764,7 @@ Intializes the weight matrix and bias vector, set their gradient to 0 and declar
         self.grad_W += grad_output.T.mm(self.input)
         self.grad_b += grad_output.T.sum(axis = 1)
 
-        return grad_input
-
-
-    def param(self):
-        &#34;&#34;&#34; Returns a list of 2 tuples: [(weights, weights gradient), (biases, biases gradient)]&#34;&#34;&#34;
-
-        return [(self.W, self.grad_W), (self.b, self.grad_b)]</code></pre>
+        return grad_input</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -868,21 +851,6 @@ Stores the input_ for the backward pass.</p>
     output = input_.mm(self.W.T) + self.b
 
     return output</code></pre>
-</details>
-</dd>
-<dt id="module.Linear.param"><code class="name flex">
-<span>def <span class="ident">param</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Returns a list of 2 tuples: [(weights, weights gradient), (biases, biases gradient)]</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def param(self):
-    &#34;&#34;&#34; Returns a list of 2 tuples: [(weights, weights gradient), (biases, biases gradient)]&#34;&#34;&#34;
-
-    return [(self.W, self.grad_W), (self.b, self.grad_b)]</code></pre>
 </details>
 </dd>
 <dt id="module.Linear.zero_grad"><code class="name flex">
@@ -1181,9 +1149,7 @@ Stores the error for the backward pass.</p>
     def forward(self , *input_):
         raise NotImplementedError
     def backward(self , *gradwrtoutput):
-        raise NotImplementedError
-    def param(self):
-        return []</code></pre>
+        raise NotImplementedError</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -1219,19 +1185,6 @@ Stores the error for the backward pass.</p>
 </summary>
 <pre><code class="python">def forward(self , *input_):
     raise NotImplementedError</code></pre>
-</details>
-</dd>
-<dt id="module.Module.param"><code class="name flex">
-<span>def <span class="ident">param</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def param(self):
-    return []</code></pre>
 </details>
 </dd>
 </dl>
@@ -1479,12 +1432,9 @@ def f_prime(x):
                         Learning rate to tune the size of the step
                 &#34;&#34;&#34;
         for layer in self.layers:
-                if layer.param(): # If non-empty parameter list
+                if layer.trainable: 
                     layer.W -= lr*layer.grad_W
-                    layer.b -= lr*layer.grad_b
-
-    def param(self):
-        return [layer.param() for layer in self.layers]</code></pre>
+                    layer.b -= lr*layer.grad_b</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1572,19 +1522,6 @@ def f_prime(x):
     return output</code></pre>
 </details>
 </dd>
-<dt id="module.Sequential.param"><code class="name flex">
-<span>def <span class="ident">param</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def param(self):
-    return [layer.param() for layer in self.layers]</code></pre>
-</details>
-</dd>
 <dt id="module.Sequential.step"><code class="name flex">
 <span>def <span class="ident">step</span></span>(<span>self, lr)</span>
 </code></dt>
@@ -1608,7 +1545,7 @@ def f_prime(x):
                     Learning rate to tune the size of the step
             &#34;&#34;&#34;
     for layer in self.layers:
-            if layer.param(): # If non-empty parameter list
+            if layer.trainable: 
                 layer.W -= lr*layer.grad_W
                 layer.b -= lr*layer.grad_b</code></pre>
 </details>
@@ -1829,7 +1766,6 @@ def f_prime(x):
 <ul class="">
 <li><code><a title="module.Linear.backward" href="#module.Linear.backward">backward</a></code></li>
 <li><code><a title="module.Linear.forward" href="#module.Linear.forward">forward</a></code></li>
-<li><code><a title="module.Linear.param" href="#module.Linear.param">param</a></code></li>
 <li><code><a title="module.Linear.zero_grad" href="#module.Linear.zero_grad">zero_grad</a></code></li>
 </ul>
 </li>
@@ -1852,7 +1788,6 @@ def f_prime(x):
 <ul class="">
 <li><code><a title="module.Module.backward" href="#module.Module.backward">backward</a></code></li>
 <li><code><a title="module.Module.forward" href="#module.Module.forward">forward</a></code></li>
-<li><code><a title="module.Module.param" href="#module.Module.param">param</a></code></li>
 </ul>
 </li>
 <li>
@@ -1867,7 +1802,6 @@ def f_prime(x):
 <ul class="">
 <li><code><a title="module.Sequential.backward" href="#module.Sequential.backward">backward</a></code></li>
 <li><code><a title="module.Sequential.forward" href="#module.Sequential.forward">forward</a></code></li>
-<li><code><a title="module.Sequential.param" href="#module.Sequential.param">param</a></code></li>
 <li><code><a title="module.Sequential.step" href="#module.Sequential.step">step</a></code></li>
 <li><code><a title="module.Sequential.zero_grad" href="#module.Sequential.zero_grad">zero_grad</a></code></li>
 </ul>
