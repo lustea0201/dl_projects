@@ -12,6 +12,10 @@ from utils import num_of_train_param
 # import the models
 from models.net2 import Net2
 
+#import the data
+from dlc_practical_prologue import generate_pair_sets
+nSamples = 1000
+
 #### Net2 ####
 
 # digit classifier params
