@@ -54,7 +54,7 @@ def accuracy(model, input_, target, mini_batch_size, with_class = False):
         gt = target.narrow(0, b, mini_batch_size)
         nb_errors += (output != gt).sum().item()
     N = input_.shape[0]
-    return 100*(N-nb_errors)/N
+    return 100-100*(N-nb_errors)/N
 
 
 def train_model(model, train_input, train_target, test_input, test_target, nb_epochs, mini_batch_size, optimizer, criterion):
