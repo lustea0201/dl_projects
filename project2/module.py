@@ -190,10 +190,10 @@ class LossMSE(Module):
             The sum of the MSE loss of each batch
         """
 
+        self.t = target
+        self.p = prediction
         error = target - prediction
-        self.error = error
-        self.d = prediction.shape[1]
-        loss = error.pow(2).sum()/self.d
+        loss = error.pow(2).sum()/target.shape[1]
 
         return loss
 
@@ -206,7 +206,7 @@ class LossMSE(Module):
             The gradient with respect to the input of the loss function
         """
 
-        return -2*self.error/self.d
+        return -2*(self.t - self.p)/self.t.shape[1]
 
 class LossBCE(Module):
     """ Binary Cross Entropy Loss.
@@ -392,12 +392,12 @@ class Sequential(Module):
     def step(self, lr):
         """ Perform one step of mini-batch SGD.
 
-		Parameters
-		----------
-		lr: float
-			Learning rate to tune the size of the step
-		"""
+        Parameters
+        ----------
+        lr: float
+            Learning rate to tune the size of the step
+        """
         for layer in self.layers:
-                if layer.trainable: 
+                if layer.trainable:
                     layer.W -= lr*layer.grad_W
                     layer.b -= lr*layer.grad_b
